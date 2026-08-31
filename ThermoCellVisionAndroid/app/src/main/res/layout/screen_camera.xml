@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_dark">
+
+    <!-- Full-screen live camera + Visual Heat Estimation overlay.
+         Unlike a passthrough Preview, this shows the ALREADY-COMPOSITED
+         frame (heat/placement overlays baked in), same as the Kivy
+         ThermoCellCameraView did via analyze_pixels_callback. -->
+    <ImageView
+        android:id="@+id/cameraOutput"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:contentDescription="@null" />
+
+    <!-- ============ Top bar: title + LIVE indicator ============ -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp"
+        android:background="@drawable/bg_glass_panel">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/title_bar"
+            android:textStyle="bold"
+            android:textSize="17sp"
+            android:textColor="@color/accent_cyan" />
+
+        <ImageView
+            android:id="@+id/liveDot"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginEnd="6dp"
+            android:src="@drawable/shape_dot"
+            android:contentDescription="@null" />
+
+        <TextView
+            android:id="@+id/statusText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="STARTING"
+            android:textStyle="bold"
+            android:textSize="12sp"
+            android:textColor="@color/text_dim" />
+    </LinearLayout>
+
+    <!-- ============ Legend (top-left) ============ -->
+    <LinearLayout
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="78dp"
+        android:orientation="vertical"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:background="@drawable/bg_glass_panel">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/legend_title"
+            android:textStyle="bold"
+            android:textSize="10sp"
+            android:textColor="@color/text_muted"
+            android:layout_marginBottom="6dp" />
+
+        <include layout="@layout/item_legend_chip" android:id="@+id/legendHot" />
+        <include layout="@layout/item_legend_chip" android:id="@+id/legendRecommended" />
+        <include layout="@layout/item_legend_chip" android:id="@+id/legendSurface" />
+    </LinearLayout>
+
+    <!-- ============ Right-side floating control rail ============ -->
+    <LinearLayout
+        android:layout_width="58dp"
+        android:layout_height="320dp"
+        android:layout_gravity="end|center_vertical"
+        android:layout_marginEnd="14dp"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btnScan"
+            style="@style/GlassButtonStyle"
+            android:text="@string/btn_scan" />
+
+        <Button
+            android:id="@+id/btnPauseResume"
+            style="@style/GlassButtonStyle"
+            android:text="@string/btn_pause" />
+
+        <Button
+            android:id="@+id/btnReset"
+            style="@style/GlassButtonStyle"
+            android:text="@string/btn_reset" />
+
+        <Button
+            android:id="@+id/btnFlip"
+            style="@style/GlassButtonStyle"
+            android:textSize="10sp"
+            android:text="@string/btn_flip" />
+
+        <Button
+            android:id="@+id/btnTorch"
+            style="@style/GlassButtonStyle"
+            android:text="@string/btn_torch" />
+    </LinearLayout>
+
+    <!-- ============ Sliders panel (sensitivity / overlay opacity) ============ -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="192dp"
+        android:orientation="vertical"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:background="@drawable/bg_glass_panel">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/label_sensitivity"
+                android:textStyle="bold"
+                android:textSize="10sp"
+                android:textColor="@color/accent_cyan" />
+
+            <TextView
+                android:id="@+id/sensitivityValueLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="50%"
+                android:textStyle="bold"
+                android:textSize="10sp"
+                android:textColor="@color/text_dim" />
+        </LinearLayout>
+
+        <SeekBar
+            android:id="@+id/sensitivitySlider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="100"
+            android:progress="50" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/label_opacity"
+                android:textStyle="bold"
+                android:textSize="10sp"
+                android:textColor="@color/accent_violet" />
+
+            <TextView
+                android:id="@+id/opacityValueLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="45%"
+                android:textStyle="bold"
+                android:textSize="10sp"
+                android:textColor="@color/text_dim" />
+        </LinearLayout>
+
+        <!-- Range is 10-90 in the original; SeekBar has no min attr pre-API26
+             use, so we offset in code: progress 0-80 maps to 10-90. -->
+        <SeekBar
+            android:id="@+id/opacitySlider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="80"
+            android:progress="35" />
+    </LinearLayout>
+
+    <!-- ============ AI (Groq) classification chip, above bottom panel ============ -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="112dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:background="@drawable/bg_glass_panel">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="AI VERDICT (GROQ)"
+            android:textStyle="bold"
+            android:textSize="10sp"
+            android:textColor="@color/accent_violet" />
+
+        <TextView
+            android:id="@+id/aiVerdictLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="—"
+            android:textStyle="bold"
+            android:textSize="12sp"
+            android:textColor="@color/text_dim" />
+    </LinearLayout>
+
+    <!-- ============ Bottom floating status panel ============ -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="16dp"
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:background="@drawable/bg_glass_panel">
+
+        <TextView
+            android:id="@+id/hotStatusLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/status_no_hot"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:textColor="@color/text_muted" />
+
+        <TextView
+            android:id="@+id/placementStatusLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/status_placement_no"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:textColor="@color/text_muted" />
+
+        <TextView
+            android:id="@+id/confidenceLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CONFIDENCE: 00%"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:textColor="@color/accent_cyan" />
+    </LinearLayout>
+
+</FrameLayout>

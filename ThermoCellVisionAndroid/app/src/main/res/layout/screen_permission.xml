@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_dark">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:orientation="vertical"
+        android:paddingStart="22dp"
+        android:paddingEnd="22dp"
+        android:paddingTop="22dp"
+        android:paddingBottom="22dp"
+        android:background="@drawable/bg_glass_panel_large_radius">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/permission_title"
+            android:textStyle="bold"
+            android:textSize="19sp"
+            android:textColor="@color/accent_cyan"
+            android:gravity="center"
+            android:layout_marginBottom="14dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/permission_body"
+            android:textSize="13sp"
+            android:textColor="@color/text_dim"
+            android:gravity="center"
+            android:layout_marginBottom="14dp" />
+
+        <Button
+            android:id="@+id/btnTryAgain"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="@string/btn_try_again"
+            android:textStyle="bold"
+            android:background="@drawable/bg_glass_button"
+            android:textColor="#E5F8FF"
+            android:stateListAnimator="@null" />
+    </LinearLayout>
+</FrameLayout>
