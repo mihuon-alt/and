@@ -16,6 +16,7 @@ android {
         // Read from local.properties (gitignored) so the key is never
         // committed. See README for setup: groq.apiKey=gsk_xxx
         def groqApiKey = ""
+        if (groqApiKey.isEmpty()) { groqApiKey = System.getenv('GROQ_API_KEY') ?: '' }
         Properties localProps = new Properties()
         File localPropsFile = rootProject.file("local.properties")
         if (localPropsFile.exists()) {
